@@ -1,3 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+:root {
+  --primary-color: #fff;
+  --secondary-color: #000000;
+  --background-color: #ebe8e8;
+  --primary-font: 'Arial';
+  --secondary-font: 'Montserrat', sans-serif;
+  ;
+}
+
 body {
-  background-color: #af5151;
+  background-color: var(--background-color);
+  font-family: var(--primary-font);
 }
