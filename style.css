@@ -12,8 +12,10 @@ html {
   --primary-color: #fff;
   --secondary-color: #000000;
   --background-color: #ebe8e8;
+  --secondary-background-color: rgb(186 225 243);
   --primary-font: 'Arial';
   --secondary-font: 'Montserrat', sans-serif;
+
   ;
 }
 
@@ -24,7 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: stretch;
   min-height: 100vh;
   padding: 15px;
 }
@@ -33,10 +35,13 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-self: start;
+  align-items: start;
 }
 
 .container {
   max-width: 90%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -52,4 +57,118 @@ body {
   text-align: center;
   color: var(--secondary-color);
   text-decoration: none;
+}
+
+
+.table {
+  width: 100%;
+}
+
+/* .table__list */
+
+.table__list {
+  width: 100%;
+}
+
+/* .table__item */
+
+.table__item {
+  margin: 10px 0px;
+}
+
+.item {
+  padding: 5px 15px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondary-background-color);
+}
+
+.item--header {
+  background-color: #5e5c5c;
+  color: var(--primary-color);
+}
+
+/* .item__box */
+
+.item__box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* .item__img-container */
+
+.item__img-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 10px;
+}
+
+/* .item__img */
+.item__img-wrapper {
+  display: block;
+  width: 30px;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: #5e5c5c;
+}
+
+.item__img {
+  max-width: 100%;
+  width: 30px;
+  color: var(--secondary-color);
+
+}
+
+/* .item__createdAt */
+
+.item__createdAt {}
+
+/* .item__category */
+
+.item__category {}
+
+/* .item__content */
+
+.item__content {}
+
+/* .item__dates */
+
+.item__dates {}
+
+/* .item__buttons */
+
+.item__buttons {}
+
+.buttons {}
+
+/* .buttons__wrapper */
+
+.buttons__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px
+}
+
+.button {
+  max-width: 100%;
+  width: 30px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.button>img {
+  max-width: 100%;
+  width: 20px;
+  color: var(--secondary-color);
+}
+
+.button--light {
+  filter: invert(95%) sepia(100%) saturate(0%) hue-rotate(106deg) brightness(105%) contrast(104%);
 }
