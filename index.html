@@ -42,6 +42,35 @@
       <a href="https://github.com/xtadeushx/notes-app" target="_blank" class="footer__link">@ xtadeushx 2023</a>
     </div>
   </footer>
+
+  <div class="modal">
+    <div class="modal__wrapper"></div>
+    <div class="modal__body">
+      <form action="" class="form">
+        <label class="label">
+          Name
+          <input type="text" placeholder="type name" class="input">
+        </label>
+
+        <select name="select" id="select" class="select">
+          <option value="Task">Task</option>
+          <option value="Random Thoughts">Random Thoughts</option>
+          <option value="Idea">Idea</option>
+          <option value="Quote">Quote</option>
+        </select>
+        <label class="label">
+          Content
+          <input type="text" placeholder="type content" class="input">
+        </label>
+        <label class="label">
+          Dates
+          <input type="date" class="input">
+        </label>
+        <button type="submit" class="add-note__button">add note</button>
+      </form>
+    </div>
+    <p class="close">X</p>
+  </div>
 </body>
 
 </html>
