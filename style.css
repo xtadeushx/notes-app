@@ -5,7 +5,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 10px;
 }
 
 :root {
@@ -20,4 +20,36 @@ html {
 body {
   background-color: var(--background-color);
   font-family: var(--primary-font);
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 15px;
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.title {}
+
+.footer {
+  justify-content: end;
+  width: 100%;
+}
+
+.footer__link {
+  display: block;
+  text-align: center;
+  color: var(--secondary-color);
+  text-decoration: none;
 }
