@@ -13,8 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
   table.appendChild(list);
 
   render(DATA_STATE, list);
-
-  const DELETE_BUTTONS = document.querySelectorAll('.delete');
 });
 
 function render(data, root) {
@@ -43,24 +41,23 @@ function render(data, root) {
       }
     });
     item.innerHTML = `
-  <div class="item__box">
+ 
     <div class="item__img-container">
       <span class="item__img-wrapper"><img class="item__img button--light" src=${
         el.src
       }
           alt=${el.title}></span>
-      <span>${el.title}</span>
+      <p class="item__title">${el.title}</p>
     </div>
     <p class="item__createdAt">${el.createdAt}</p>
     <p class="item__category">${el.category}</p>
-    <p class="item__content">${el.content.join('')}</p>
-    <p class="item__dates">${el.dates.join('')}</p>
+    <p class="item__content">${el.content.join(', ')}</p>
+    <p class="item__dates">${el.dates.join(', ')}</p>
     <div class="item__buttons buttons__wrapper">
       <button class="button edit" data-set='edit'><img src="./assets/editing.png" alt="editing button"></button>
       <button class="button archive" data-set='archive'><img src="./assets/archive.png" alt="archive button"></button>
       <button class="button delete" data-set='delete'><img src="./assets/delete.png" alt="delete button"></button>
-    </div>
-  </div>`;
+    </div>`;
 
     root.appendChild(item);
   });
