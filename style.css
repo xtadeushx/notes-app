@@ -45,7 +45,9 @@ body {
   margin: 0 auto;
 }
 
-.title {}
+.title {
+  margin-bottom: 10px;
+}
 
 .footer {
   justify-content: end;
@@ -152,7 +154,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px
+  gap: 5px
 }
 
 .button {
@@ -171,4 +173,11 @@ body {
 
 .button--light {
   filter: invert(95%) sepia(100%) saturate(0%) hue-rotate(106deg) brightness(105%) contrast(104%);
+}
+
+.add-note__button {
+  padding: 5px;
+  cursor: pointer;
+  justify-content: end;
+  margin-top: 10px;
 }

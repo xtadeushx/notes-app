@@ -18,7 +18,7 @@ const DATA = [
     dates: [],
   },
   {
-    id: 2,
+    id: 3,
     src: './assets/lightbulb.png',
     title: 'New feature',
     createdAt: 'April,27 2021',
@@ -27,3 +27,5 @@ const DATA = [
     dates: ['3/5/2021', '5/5/2021'],
   },
 ];
+
+export { DATA };
