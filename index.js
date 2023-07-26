@@ -84,12 +84,12 @@ function render(data, root) {
 
     root.appendChild(item);
   });
-}
+};
 
 function deleteItem(id, data, root) {
   const NEW_DATA = data.filter((el) => el.id != +(+id));
   render(NEW_DATA, root);
-}
+};
 
 function editItem(event, data) {
   const modal = document.querySelector('.modal');
@@ -98,24 +98,24 @@ function editItem(event, data) {
   const currentItem = data.find((el) => el.id == currentId);
 
   if (!currentItem) return;
-  form.elements.name.value = currentItem.title;
-  form.elements.select.value = currentItem.category.toUpperCase();
+  form.elements.title.value = currentItem.title;
+  form.elements.category.value = currentItem.category.toUpperCase();
   form.elements.content.value = currentItem.content;
   form.elements.date.value = new Date(currentItem.content.createdAt);
   console.log(form.elements.select.value);
 
   handelModalVisible(modal);
-}
+};
 
 function addToArchiveItem() {
   console.log('archive');
-}
+};
 
 function openModal(el, target) {
   el.addEventListener('click', () => {
     handelModalVisible(target);
   });
-}
+};
 
 function closeModal(trigger, modal) {
   document.addEventListener('click', (event) => {
@@ -128,10 +128,10 @@ function closeModal(trigger, modal) {
       return;
     }
   });
-}
+};
 
 function addNewItem(modal, notesList, root) {
-  const form = document.querySelector('#form');
+  const form = document.querySelector("#form");
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
@@ -152,13 +152,14 @@ function addNewItem(modal, notesList, root) {
 
     handelModalHide(modal);
   });
-}
+};
 
 function handelModalHide(modal) {
   modal.classList.remove(CLASSES.MODAL_ACTIVE);
   modal.classList.add(CLASSES.MODAL_HIDE);
-}
+};
+
 function handelModalVisible(modal) {
   modal.classList.add(CLASSES.MODAL_ACTIVE);
   modal.classList.remove(CLASSES.MODAL_HIDE);
-}
+};

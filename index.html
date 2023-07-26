@@ -49,18 +49,20 @@
       <form action="#" class="form" id="form">
         <label class="label">
           Name
-          <input type="text" name="title" placeholder="Note name" class="input" value="" id="inputName" required>
+          <input type="text" name="title" placeholder="Note name" class="input" value="" id="inputName" required
+            maxlength="5">
         </label>
 
         <select id="select" class="select" name="category">
-          <option value="Task">Task</option>
+          <option value="Task" selected>Task</option>
           <option value="Random Thoughts">Random Thoughts</option>
           <option value="Idea">Idea</option>
           <option value="Quote">Quote</option>
         </select>
         <label class="label">
           Content
-          <input type="text" name="content" placeholder="Note content" class="input" value="" id="inputContent">
+          <input type="text" name="content" placeholder="Note content" class="input" value="" id="inputContent" required
+            maxlength="5">
         </label>
         <label class="label">
           Dates
