@@ -46,13 +46,13 @@
   <div class="modal modal-hide">
     <div class="modal__wrapper"></div>
     <div class="modal__body">
-      <form action="" class="form">
+      <form action="" class="form" id="form">
         <label class="label">
           Name
-          <input type="text" placeholder="type name" class="input">
+          <input type="text" name="name" placeholder="Note name" class="input" value="" id="inputName">
         </label>
 
-        <select name="select" id="select" class="select">
+        <select name="select" id="select" class="select" name="select">
           <option value="Task">Task</option>
           <option value="Random Thoughts">Random Thoughts</option>
           <option value="Idea">Idea</option>
@@ -60,11 +60,11 @@
         </select>
         <label class="label">
           Content
-          <input type="text" placeholder="type content" class="input">
+          <input type="text" name="content" placeholder="Note content" class="input" value="" id="inputContent">
         </label>
         <label class="label">
           Dates
-          <input type="date" class="input">
+          <input type="date" name="date" class="input" id="inputDate" value="">
         </label>
         <button type="submit" class="add-note__button">add note</button>
       </form>

@@ -1,5 +1,5 @@
 import { DATA } from './data.js';
-import { createElement } from './domHelper.js';
+import { createElement } from './helpers/domHelper.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.querySelector('.table');
@@ -39,7 +39,7 @@ function render(data, root) {
           addToArchiveItem();
           break;
         case 'edit':
-          editItem();
+          editItem(event, data);
           break;
 
         default:
@@ -47,7 +47,6 @@ function render(data, root) {
       }
     });
     item.innerHTML = `
- 
     <div class="item__img-container">
       <span class="item__img-wrapper"><img class="item__img button--light" src=${
         el.src
@@ -74,8 +73,21 @@ function deleteItem(id, data, root) {
   render(NEW_DATA, root);
 }
 
-function editItem() {
-  console.log('edit');
+function editItem(event, data) {
+  const modal = document.querySelector('.modal');
+  const form = document.querySelector('#form');
+  const currentId = event.target?.closest('li').getAttribute('id');
+  const currentItem = data.find((el) => el.id == currentId);
+
+  if (!currentItem) return;
+  form.elements.name.value = currentItem.title;
+  form.elements.select.value = currentItem.category.toUpperCase();
+  form.elements.content.value = currentItem.content;
+  form.elements.date.value = new Date(currentItem.content.createdAt);
+  console.log(form.elements.select.value);
+
+  modal.classList.add('modal-active');
+  modal.classList.remove('modal-hide');
 }
 
 function addToArchiveItem() {
