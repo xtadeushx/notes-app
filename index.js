@@ -3,8 +3,10 @@ import { createElement } from './domHelper.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.querySelector('.table');
+  const modal = document.querySelector('.modal');
   const DATA_STATE = [...DATA];
-
+  const addNoteButton = document.querySelector('#add-note');
+  const closeButton = document.querySelector('.close');
   const list = createElement({
     tagName: 'ul',
     className: 'table__list',
@@ -13,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
   table.appendChild(list);
 
   render(DATA_STATE, list);
+
+  openModal(addNoteButton, modal);
+
+  closeModal(closeButton, modal);
 });
 
 function render(data, root) {
@@ -74,4 +80,25 @@ function editItem() {
 
 function addToArchiveItem() {
   console.log('archive');
+}
+
+function openModal(el, target) {
+  el.addEventListener('click', () => {
+    target.classList.add('modal-active');
+    target.classList.remove('modal-hide');
+  });
+}
+
+function closeModal(trigger, modal) {
+  document.addEventListener('click', (event) => {
+    if (
+      (event.target.classList.contains('close') && trigger) ||
+      event.target.classList.contains('modal__wrapper')
+    ) {
+      modal.classList.remove('modal-active');
+      modal.classList.add('modal-hide');
+    } else {
+      return;
+    }
+  });
 }

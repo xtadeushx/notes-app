@@ -219,6 +219,10 @@ body {
   display: block;
 }
 
+.modal-hide {
+  display: none;
+}
+
 .close {
   display: flex;
   justify-content: center;
@@ -231,5 +235,4 @@ body {
   background-color: var(--primary-color);
   top: 130px;
   right: 410px;
-
 }
