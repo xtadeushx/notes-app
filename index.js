@@ -1,4 +1,5 @@
 import { DATA } from './data.js';
+import { formatDateLong, formatDateShort } from './helpers/dateHelper.js';
 import { createElement } from './helpers/domHelper.js';
 
 const CLASSES = {
@@ -6,10 +7,17 @@ const CLASSES = {
   MODAL_HIDE: 'modal-hide',
 };
 
+const ICONS_SRC = {
+  task: './assets/shopping-cart.png',
+  'random thoughts': './assets/thought.png',
+  idea: './assets/lightbulb.png',
+  quote: './assets/quote.png',
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.querySelector('.table');
   const modal = document.querySelector('.modal');
-  const DATA_STATE = [...DATA];
+  const NOTES_LIST = [...DATA];
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
 
@@ -22,13 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   table.appendChild(list);
 
-  render(DATA_STATE, list);
+  render(NOTES_LIST, list);
 
   openModal(addNoteButton, modal);
 
   closeModal(closeButton, modal);
 
-  addNewItem(modal);
+  addNewItem(modal, NOTES_LIST, list);
 });
 
 function render(data, root) {
@@ -122,12 +130,26 @@ function closeModal(trigger, modal) {
   });
 }
 
-function addNewItem(modal) {
+function addNewItem(modal, notesList, root) {
   const form = document.querySelector('#form');
   form.addEventListener('submit', (event) => {
-    const data = Object.fromEntries(new FormData(form).entries());
-    console.log(data);
     event.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    const newItem = {
+      id: Math.random().toString(),
+      src: ICONS_SRC[data.category.toLowerCase()],
+      title: data.title,
+      createdAt: formatDateLong(new Date(Date.now())),
+      category: data.category,
+      content: [data.content],
+      dates: [],
+    };
+
+    notesList.push(newItem);
+
+    render(notesList, root);
+
     handelModalHide(modal);
   });
 }
