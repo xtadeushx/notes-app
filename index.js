@@ -1,12 +1,20 @@
 import { DATA } from './data.js';
 import { createElement } from './helpers/domHelper.js';
 
+const CLASSES = {
+  MODAL_ACTIVE: 'modal-active',
+  MODAL_HIDE: 'modal-hide',
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const table = document.querySelector('.table');
   const modal = document.querySelector('.modal');
   const DATA_STATE = [...DATA];
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
+
+  let isEdiMode = false;
+
   const list = createElement({
     tagName: 'ul',
     className: 'table__list',
@@ -19,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
   openModal(addNoteButton, modal);
 
   closeModal(closeButton, modal);
+
+  addNewItem(modal);
 });
 
 function render(data, root) {
@@ -86,8 +96,7 @@ function editItem(event, data) {
   form.elements.date.value = new Date(currentItem.content.createdAt);
   console.log(form.elements.select.value);
 
-  modal.classList.add('modal-active');
-  modal.classList.remove('modal-hide');
+  handelModalVisible(modal);
 }
 
 function addToArchiveItem() {
@@ -96,8 +105,7 @@ function addToArchiveItem() {
 
 function openModal(el, target) {
   el.addEventListener('click', () => {
-    target.classList.add('modal-active');
-    target.classList.remove('modal-hide');
+    handelModalVisible(target);
   });
 }
 
@@ -107,10 +115,28 @@ function closeModal(trigger, modal) {
       (event.target.classList.contains('close') && trigger) ||
       event.target.classList.contains('modal__wrapper')
     ) {
-      modal.classList.remove('modal-active');
-      modal.classList.add('modal-hide');
+      handelModalHide(modal);
     } else {
       return;
     }
   });
+}
+
+function addNewItem(modal) {
+  const form = document.querySelector('#form');
+  form.addEventListener('submit', (event) => {
+    const data = Object.fromEntries(new FormData(form).entries());
+    console.log(data);
+    event.preventDefault();
+    handelModalHide(modal);
+  });
+}
+
+function handelModalHide(modal) {
+  modal.classList.remove(CLASSES.MODAL_ACTIVE);
+  modal.classList.add(CLASSES.MODAL_HIDE);
+}
+function handelModalVisible(modal) {
+  modal.classList.add(CLASSES.MODAL_ACTIVE);
+  modal.classList.remove(CLASSES.MODAL_HIDE);
 }
