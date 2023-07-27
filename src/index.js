@@ -1,5 +1,5 @@
 import { DATA } from '../src/models/data.js';
-import { formatDateLong,createElement, formatDateShort } from '../src/helpers/helper.js';
+import { formatDateLong, createElement, formatDateShort } from '../src/helpers/helper.js';
 import { renderRow } from '../src/components/ui/renderRow.js';
 
 const CLASSES = {
@@ -15,9 +15,9 @@ const ICONS_SRC = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  let NOTES_LIST = [...DATA];
   const table = document.querySelector('.table');
   const modal = document.querySelector('.modal');
-  const NOTES_LIST = [...DATA];
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
 
@@ -37,109 +37,129 @@ document.addEventListener('DOMContentLoaded', () => {
   closeModal(closeButton, modal);
 
   addNewItem(modal, NOTES_LIST, list);
-});
 
-function render(data, root) {
-  root.innerHTML = '';
-  data.map((el) => {
-    const item = renderRow(el);
 
-    item.addEventListener('click', (event) => {
-      let key = event.target?.closest('button')?.getAttribute('data-set');
-      switch (key) {
-        case 'delete':
-          deleteItem(el.id, data, root);
-          break;
-        case 'archive':
-          addToArchiveItem();
-          break;
-        case 'edit':
-          editItem(event, data);
-          break;
+  function render(data, root) {
+    root.innerHTML = '';
+    data.forEach((el) => {
+      const item = renderRow(el);
 
-        default:
-          break;
+      item.addEventListener('click', (event) => {
+        let key = event.target?.closest('button')?.getAttribute('data-set');
+        switch (key) {
+          case 'delete':
+            deleteItem(el.id, data, root);
+            break;
+          case 'archive':
+            addToArchiveItem();
+            break;
+          case 'edit':
+            editItem(event, data, root);
+            break;
+
+          default:
+            break;
+        }
+      });
+
+      root.appendChild(item);
+    });
+  }
+
+
+  function deleteItem(id, data, root) {
+    const updatedData = data.filter((el) => el.id !== id);
+    NOTES_LIST = [...updatedData];
+    render(updatedData, root);
+  }
+
+  function editItem(event, data, root) {
+    const modal = document.querySelector('.modal');
+    const form = document.querySelector('#form');
+    const currentId = event.target.closest('li').getAttribute('id');
+    const currentItem = data.find((el) => el.id === currentId);
+
+    if (!currentItem) return;
+    form.elements.title.value = currentItem.title;
+    form.elements.category.value = currentItem.category.toUpperCase();
+    form.elements.content.value = currentItem.content;
+    form.elements.date.value = new Date(currentItem.createdAt).toISOString().split('T')[0]; // Correctly set the date value
+    handelModalVisible(modal);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = Object.fromEntries(new FormData(form).entries());
+
+      const correctedItem = {
+        ...currentItem,
+        src: ICONS_SRC[formData.category.toLowerCase()],
+        title: formData.title,
+        createdAt: formatDateLong(new Date(formData.date)),
+        category: formData.category,
+        content: [formData.content],
+        dates: [...currentItem.dates, formatDateShort(new Date(formData.date))],
+      };
+
+      const updatedData = data.map((el) => (el.id === currentId ? correctedItem : el));
+      NOTES_LIST = [...updatedData]; // Create a new array with the updated data
+      render(updatedData, root);
+      handelModalHide(modal);
+    });
+  }
+
+  function addToArchiveItem() {
+    console.log('archive');
+  };
+
+  function openModal(el, target) {
+    el.addEventListener('click', () => {
+      handelModalVisible(target);
+    });
+  };
+
+  function closeModal(trigger, modal) {
+    document.addEventListener('click', (event) => {
+      if (
+        (event.target.classList.contains('close') && trigger) ||
+        event.target.classList.contains('modal__wrapper')
+      ) {
+        handelModalHide(modal);
+      } else {
+        return;
       }
     });
+  };
 
-    root.appendChild(item);
-  });
-};
+  function addNewItem(modal,  root) {
+    const form = document.querySelector("#form");
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
 
-function deleteItem(id, data, root) {
-  const NEW_DATA = data.filter((el) => el.id != +(+id));
-  render(NEW_DATA, root);
-};
+      const newItem = {
+        id: Math.random().toString(),
+        src: ICONS_SRC[data.category.toLowerCase()],
+        title: data.title,
+        createdAt: formatDateLong(new Date(Date.now())),
+        category: data.category,
+        content: [data.content],
+        dates: [],
+      };
 
-function editItem(event, data) {
-  const modal = document.querySelector('.modal');
-  const form = document.querySelector('#form');
-  const currentId = event.target?.closest('li').getAttribute('id');
-  const currentItem = data.find((el) => el.id == currentId);
-
-  if (!currentItem) return;
-  form.elements.title.value = currentItem.title;
-  form.elements.category.value = currentItem.category.toUpperCase();
-  form.elements.content.value = currentItem.content;
-  form.elements.date.value = new Date(currentItem.content.createdAt);
-  console.log(form.elements.select.value);
-
-  handelModalVisible(modal);
-};
-
-function addToArchiveItem() {
-  console.log('archive');
-};
-
-function openModal(el, target) {
-  el.addEventListener('click', () => {
-    handelModalVisible(target);
-  });
-};
-
-function closeModal(trigger, modal) {
-  document.addEventListener('click', (event) => {
-    if (
-      (event.target.classList.contains('close') && trigger) ||
-      event.target.classList.contains('modal__wrapper')
-    ) {
+      const updatedData = [...NOTES_LIST, newItem];
+      NOTES_LIST = [...updatedData];
+      render(updatedData, root);
       handelModalHide(modal);
-    } else {
-      return;
-    }
-  });
-};
+    });
+  };
 
-function addNewItem(modal, notesList, root) {
-  const form = document.querySelector("#form");
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
+  function handelModalHide(modal) {
+    modal.classList.remove(CLASSES.MODAL_ACTIVE);
+    modal.classList.add(CLASSES.MODAL_HIDE);
+  };
 
-    const newItem = {
-      id: Math.random().toString(),
-      src: ICONS_SRC[data.category.toLowerCase()],
-      title: data.title,
-      createdAt: formatDateLong(new Date(Date.now())),
-      category: data.category,
-      content: [data.content],
-      dates: [],
-    };
-
-    notesList.push(newItem);
-
-    render(notesList, root);
-
-    handelModalHide(modal);
-  });
-};
-
-function handelModalHide(modal) {
-  modal.classList.remove(CLASSES.MODAL_ACTIVE);
-  modal.classList.add(CLASSES.MODAL_HIDE);
-};
-
-function handelModalVisible(modal) {
-  modal.classList.add(CLASSES.MODAL_ACTIVE);
-  modal.classList.remove(CLASSES.MODAL_HIDE);
-};
+  function handelModalVisible(modal) {
+    modal.classList.add(CLASSES.MODAL_ACTIVE);
+    modal.classList.remove(CLASSES.MODAL_HIDE);
+  };
+});
