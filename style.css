@@ -170,6 +170,26 @@ body {
   margin-top: 10px;
 }
 
+.table__summary {
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  /* display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  grid-template-rows: auto;
+  align-items: center; */
+}
+
+.table__summary-wrapper {
+  background-color: #5e5c5c;
+  color: var(--primary-color);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr;
+  grid-template-rows: auto;
+  align-items: center;
+}
+
 /* Modal */
 
 .modal {

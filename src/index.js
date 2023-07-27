@@ -17,6 +17,7 @@ const ICONS_SRC = {
 document.addEventListener('DOMContentLoaded', () => {
   let NOTES_LIST = [...DATA];
   const table = document.querySelector('.table');
+  const summaryTable = document.querySelector('.table__summary');
   const modal = document.querySelector('.modal');
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
@@ -36,8 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
     tagName: 'ul',
     className: 'table__list',
   });
-
   table.appendChild(list);
+
+const summaryList = createElement({
+  tagName: 'ul',
+  className: 'table__list table-summary__list',
+});
+summaryTable.appendChild(summaryList);
 
   render(NOTES_LIST, list);
 
@@ -77,6 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function renderSummary(data, root){
+    const summaryList = document.querySelector('.table-summary__list')
+    if (!summaryList) return;
+   
+    summaryList.innerHTML = '';
+  }
 
   function deleteItem(id, data, root) {
     const updatedData = data.filter((el) => el.id !== id);
