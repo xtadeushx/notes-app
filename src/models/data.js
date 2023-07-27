@@ -7,6 +7,7 @@ const DATA = [
     category: 'task',
     content: ['tomatoes', 'bread'],
     dates: [],
+    status: 'active'
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ const DATA = [
     category: 'Random thoughts',
     content: ['The theory of evolution'],
     dates: [],
+    status: 'active'
   },
   {
     id: 3,
@@ -25,6 +27,7 @@ const DATA = [
     category: 'Idea',
     content: ['Implement new feature'],
     dates: ['3/5/2021', '5/5/2021'],
+    status: 'archived'
   },
 
   {
@@ -35,6 +38,7 @@ const DATA = [
     category: 'task',
     content: ['React', 'Redux'],
     dates: [],
+    status: 'active'
   },
   {
     id: 5,
@@ -44,6 +48,7 @@ const DATA = [
     category: 'quote',
     content: ['We are here to contribute to this world. Why else are we here?'],
     dates: [],
+    status: 'active'
   },
   
   {
@@ -54,6 +59,7 @@ const DATA = [
     category: 'Idea',
     content: ['Fix some bugs'],
     dates: [],
+    status: 'active'
   },
   {
     id: 7,
@@ -63,6 +69,7 @@ const DATA = [
     category: 'quote',
     content: ["The smarter a person is, the easier he recognizes himself as a fool." ],
     dates: [],
+    status: 'archived'
   },
 ];
 

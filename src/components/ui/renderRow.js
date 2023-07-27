@@ -3,7 +3,7 @@ import { createElement } from "../../helpers/helper.js";
 function renderRow(element) {
   const item = createElement({
     tagName: 'li',
-    className: 'table__item item',
+    className: `table__item item ${element.status === 'active' ? 'item_active' : 'item__archived'}`,
   });
   item.id = element.id;
 
@@ -76,6 +76,7 @@ const img =  createElement({
     className: 'button edit',
     attributes:{
       ['data-set']: 'edit',
+      type: 'button',
       }
   });
   const editIcon =  createElement({
@@ -93,8 +94,10 @@ const img =  createElement({
     className: 'button archive',
     attributes:{
       ['data-set']: 'archive',
-      }
+      type: 'button',
+    }
   });
+  archiveButton.disabled = true
   const archiveIcon =  createElement({
     tagName: 'img',
     className: 'item__img',
@@ -110,8 +113,9 @@ const img =  createElement({
     className: 'button delete',
     attributes:{
       ['data-set']: 'delete',
+      type: 'button',
       }
-  });
+    });
   const deleteIcon =  createElement({
     tagName: 'img',
     className: 'item__img',
