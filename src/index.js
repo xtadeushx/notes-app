@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   function render(data, root) {
-    root.innerHTML = '';
+    const list = document.querySelector('.table__list')
+    if (!list) return
+    list.innerHTML = '';
     data.forEach((el) => {
       const item = renderRow(el);
 
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      root.appendChild(item);
+      list.appendChild(item);
     });
   }
 
@@ -74,10 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function editItem(event, data, root) {
+
     const modal = document.querySelector('.modal');
     const form = document.querySelector('#form');
     const currentId = event.target.closest('li').getAttribute('id');
-    const currentItem = data.find((el) => el.id === currentId);
+    const currentItem = data.find((el) => el.id == currentId);
 
     if (!currentItem) return;
     form.elements.title.value = currentItem.title;
@@ -90,18 +93,22 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       const formData = Object.fromEntries(new FormData(form).entries());
 
+      const isFormValid = isValid(formData);
+      if (!isFormValid) return;
+
       const correctedItem = {
         ...currentItem,
-        src: ICONS_SRC[formData.category.toLowerCase()],
+        src: ICONS_SRC[formData?.category?.toLowerCase()],
         title: formData.title,
         createdAt: formatDateLong(new Date(formData.date)),
-        category: formData.category,
+        category: formData?.category,
         content: [formData.content],
         dates: [...currentItem.dates, formatDateShort(new Date(formData.date))],
       };
 
-      const updatedData = data.map((el) => (el.id === currentId ? correctedItem : el));
-      NOTES_LIST = [...updatedData]; // Create a new array with the updated data
+      const updatedData = data.map((el) => (el.id === +currentId ? correctedItem : el));
+      NOTES_LIST = [...updatedData];
+      console.log(NOTES_LIST);
       render(updatedData, root);
       handelModalHide(modal);
     });
@@ -130,11 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  function addNewItem(modal,  root) {
+  function addNewItem(modal, root) {
     const form = document.querySelector("#form");
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
+
+      const isFormValid = isValid(data);
+      if (!isFormValid) return;
 
       const newItem = {
         id: Math.random().toString(),
@@ -163,3 +173,19 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.remove(CLASSES.MODAL_HIDE);
   };
 });
+
+
+function isValid(data) {
+  if (!data.title && !data.title.trim()) {
+    return false;
+  }
+  if (!data.category) {
+    return false;
+  }
+  if (!data.content && !data.content.trim()) {
+    return false;
+  }
+  if (!data.date) {
+    return false;
+  }
+}
