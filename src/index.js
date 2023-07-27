@@ -1,7 +1,6 @@
-import { DATA } from './data.js';
-import { formatDateLong, formatDateShort } from './helpers/dateHelper.js';
-import { createElement } from './helpers/domHelper.js';
-import { renderRow } from './renderRow.js';
+import { DATA } from '../src/models/data.js';
+import { formatDateLong,createElement, formatDateShort } from '../src/helpers/helper.js';
+import { renderRow } from '../src/components/ui/renderRow.js';
 
 const CLASSES = {
   MODAL_ACTIVE: 'modal-active',
@@ -62,7 +61,7 @@ function render(data, root) {
           break;
       }
     });
-    
+
     root.appendChild(item);
   });
 };
