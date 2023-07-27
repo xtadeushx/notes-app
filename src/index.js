@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
 
+  let archivedNotes = NOTES_LIST.reduce((acc, prev) => {
+    if (prev.status === 'archived') {
+      acc[prev.category]++;
+    } else {
+      acc[prev.category] = 1;
+    }
+    return acc;
+  }, {});
+
   let isEdiMode = false;
 
   const list = createElement({
