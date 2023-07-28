@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
 
   let isEditMode = false;
-
+  let archivedMode = true;
   const list = createElement({
     tagName: 'ul',
     className: 'table__list',
@@ -121,8 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const isFormValid = isValid(formData);
 
-      console.log('isFormValid', isFormValid);
-
       if (!isFormValid) return;
 
       const correctedItem = {
@@ -196,12 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
     NOTES_LIST = NOTES_LIST.map(el => {
       return {
         ...el,
-        status: el.status === STATUSES.ARCHIVED
+        status: archivedMode ?  STATUSES.ARCHIVED : STATUSES.ACTIVE
       }
-    })
+    });
+    archivedMode = !archivedMode;
     render(NOTES_LIST, root1);
     const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
-    console.log(statusNotes);
     renderSummary(statusNotes, root2);
   }
   // ==========Modal =============
