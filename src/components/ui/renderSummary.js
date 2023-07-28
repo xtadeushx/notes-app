@@ -1,9 +1,8 @@
 import { createElement } from "../../helpers/helper.js";
-
-function renderRow(element) {
+function renderSummaryRow(element) {
   const item = createElement({
     tagName: 'li',
-    className: `table__item item `,
+    className: `table__item item table__item--summary`,
   });
 
   const itemContainer =  createElement({
@@ -37,21 +36,21 @@ const img =  createElement({
 
   item.appendChild(itemContainer);
 
-  const itemCreatedAt = createElement({
+  const itemActive = createElement({
     tagName: 'p',
-    className: 'item__createdAt',
+    className: 'item-summary__active',
   });
-  itemCreatedAt.textContent = element.active;
-  item.appendChild(itemCreatedAt);
+  itemActive.textContent = element.status.active;
+  item.appendChild(itemActive);
 
-  const itemCategory = createElement({
+  const itemArchived = createElement({
     tagName: 'p',
-    className: 'item__category',
+    className: 'item-summary__archived',
   });
-  itemCategory.textContent = element.archived;
-  item.appendChild(itemCategory);
+  itemArchived.textContent = element.status.archived;
+  item.appendChild(itemArchived);
 
   return item;
 }
 
-export {renderRow}
+export {renderSummaryRow}

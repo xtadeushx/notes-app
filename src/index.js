@@ -1,6 +1,7 @@
 import { DATA } from '../src/models/data.js';
-import { formatDateLong, createElement, formatDateShort } from '../src/helpers/helper.js';
+import { formatDateLong, createElement, formatDateShort, mappingNotesStatus } from '../src/helpers/helper.js';
 import { renderRow } from '../src/components/ui/renderRow.js';
+import { renderSummaryRow } from './components/ui/renderSummary.js';
 
 const CLASSES = {
   MODAL_ACTIVE: 'modal-active',
@@ -22,14 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
 
-  let archivedNotes = NOTES_LIST.reduce((acc, prev) => {
-    if (prev.status === 'archived') {
-      acc[prev.category]++;
-    } else {
-      acc[prev.category] = 1;
-    }
-    return acc;
-  }, {});
+  let statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
 
   let isEdiMode = false;
 
@@ -39,16 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   table.appendChild(list);
 
-const summaryList = createElement({
-  tagName: 'ul',
-  className: 'table__list table-summary__list',
-});
-summaryTable.appendChild(summaryList);
+  const summaryList = createElement({
+    tagName: 'ul',
+    className: 'table__list table-summary__list',
+  });
+  summaryTable.appendChild(summaryList);
 
   render(NOTES_LIST, list);
+  renderSummary(statusNotes, summaryList);
 
   openModal(addNoteButton, modal);
-
   closeModal(closeButton, modal);
 
   addNewItem(modal, NOTES_LIST, list);
@@ -83,11 +77,27 @@ summaryTable.appendChild(summaryList);
     });
   }
 
-  function renderSummary(data, root){
-    const summaryList = document.querySelector('.table-summary__list')
+  function renderSummary(data, root) {
+    const summaryList = document.querySelector('.table-summary__list');
     if (!summaryList) return;
-   
     summaryList.innerHTML = '';
+    const summaryNotesList = [];
+    for (const iterator in data) {
+      const newItem = {
+        src: ICONS_SRC[iterator.toLowerCase()],
+        title: iterator,
+        status: {
+          archived: data[iterator].status.archived,
+          active: data[iterator].status.active
+        }
+      }
+      summaryNotesList.push(newItem);
+    }
+
+    summaryNotesList.forEach((el) => {
+      const item = renderSummaryRow(el);
+      summaryList.appendChild(item);
+    })
   }
 
   function deleteItem(id, data, root) {

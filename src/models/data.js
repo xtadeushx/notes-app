@@ -17,7 +17,7 @@ const DATA = [
     category: 'Random thoughts',
     content: ['The theory of evolution'],
     dates: [],
-    status: 'active'
+    status: 'archived'
   },
   {
     id: 3,
@@ -48,7 +48,7 @@ const DATA = [
     category: 'quote',
     content: ['We are here to contribute to this world. Why else are we here?'],
     dates: [],
-    status: 'active'
+    status: 'archived'
   },
   
   {

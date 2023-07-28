@@ -91,6 +91,11 @@ body {
 
 }
 
+.table__item--summary {
+  grid-template-columns: 3fr 2fr 2fr;
+
+}
+
 .item__img-container {
   display: flex;
   justify-content: start;
