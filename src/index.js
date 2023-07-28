@@ -39,14 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
   deleteAllButton.addEventListener('click', () => deleteAllItems(list, summaryList));
   archiveAllButton.addEventListener('click', () => archiveAllItems(list, summaryList));
 
-  render(NOTES_LIST, list);
+  render(NOTES_LIST, list, summaryList);
 
   renderSummary(statusNotes, summaryList);
 
   openModal(addNoteButton, modal);
   closeModal(closeButton, modal);
 
-  addNewItem(modal, list);
+  addNewItem(modal, list, summaryList);
 
 
   function render(data, root) {
@@ -98,9 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function deleteItem(id, data, root) {
+    const summaryList = document.querySelector('.table-summary__list')
     const updatedData = data.filter((el) => el.id !== id);
     NOTES_LIST = [...updatedData];
     render(updatedData, root);
+    const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
+    renderSummary(statusNotes, summaryList);
   }
 
   function editItem(id, data, root) {
@@ -156,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSummary(statusNotes, summaryList);
   };
 
-  function addNewItem(modal, root) {
+  function addNewItem(modal, root, root2) {
     isEditMode = false;
     const form = document.querySelector("#form");
     form.addEventListener('submit', (event) => {
@@ -180,6 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const updatedData = [...NOTES_LIST, newItem];
       NOTES_LIST = [...updatedData];
       render(updatedData, root);
+      const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
+      renderSummary(statusNotes, root2);
       handelModalHide(modal);
     });
   };
