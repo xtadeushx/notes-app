@@ -14,7 +14,7 @@ const DATA = [
     src: './assets/thought.png',
     title: 'The theory of evolution',
     createdAt: 'April,27 2021',
-    category: 'Random thoughts',
+    category: 'random thoughts',
     content: ['The theory of evolution'],
     dates: [],
     status: 'archived'
@@ -24,7 +24,7 @@ const DATA = [
     src: './assets/lightbulb.png',
     title: 'New feature',
     createdAt: 'April,27 2021',
-    category: 'Idea',
+    category: 'idea',
     content: ['Implement new feature'],
     dates: ['3/5/2021', '5/5/2021'],
     status: 'archived'
@@ -56,7 +56,7 @@ const DATA = [
     src: './assets/lightbulb.png',
     title: 'New feature',
     createdAt: 'June,27 2021',
-    category: 'Idea',
+    category: 'idea',
     content: ['Fix some bugs'],
     dates: [],
     status: 'active'

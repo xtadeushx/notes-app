@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
 
-  let isEdiMode = false;
+  let isEditMode = false;
 
   const list = createElement({
     tagName: 'ul',
@@ -40,18 +40,17 @@ document.addEventListener('DOMContentLoaded', () => {
   summaryTable.appendChild(summaryList);
 
   render(NOTES_LIST, list);
+
   renderSummary(statusNotes, summaryList);
 
   openModal(addNoteButton, modal);
   closeModal(closeButton, modal);
 
-  addNewItem(modal, NOTES_LIST, list);
+  addNewItem(modal, list);
 
 
   function render(data, root) {
-    const list = document.querySelector('.table__list')
-    if (!list) return
-    list.innerHTML = '';
+    root.innerHTML = '';
     data.forEach((el) => {
       const item = renderRow(el);
 
@@ -62,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteItem(el.id, data, root);
             break;
           case 'archive':
-            addToArchiveItem();
+            archivedItem(el.id, data, root);
             break;
           case 'edit':
-            editItem(event, data, root);
+            editItem(el.id, data, root);
             break;
 
           default:
@@ -73,14 +72,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      list.appendChild(item);
+      root.appendChild(item);
     });
   }
 
   function renderSummary(data, root) {
-    const summaryList = document.querySelector('.table-summary__list');
-    if (!summaryList) return;
-    summaryList.innerHTML = '';
+    root.innerHTML = '';
     const summaryNotesList = [];
     for (const iterator in data) {
       const newItem = {
@@ -96,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     summaryNotesList.forEach((el) => {
       const item = renderSummaryRow(el);
-      summaryList.appendChild(item);
+      root.appendChild(item);
     })
   }
 
@@ -106,18 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
     render(updatedData, root);
   }
 
-  function editItem(event, data, root) {
-
+  function editItem(id, data, root) {
+    isEditMode = true;
     const modal = document.querySelector('.modal');
     const form = document.querySelector('#form');
-    const currentId = event.target.closest('li').getAttribute('id');
-    const currentItem = data.find((el) => el.id == currentId);
-
+    const currentItem = data.find((el) => el.id === id);
     if (!currentItem) return;
     form.elements.title.value = currentItem.title;
-    form.elements.category.value = currentItem.category.toUpperCase();
+    form.elements.category.value = currentItem.category;
     form.elements.content.value = currentItem.content;
-    form.elements.date.value = new Date(currentItem.createdAt).toISOString().split('T')[0]; // Correctly set the date value
+    form.elements.date.value = new Date(currentItem.createdAt).toISOString().split('T')[0];
     handelModalVisible(modal);
 
     form.addEventListener('submit', (event) => {
@@ -125,6 +120,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = Object.fromEntries(new FormData(form).entries());
 
       const isFormValid = isValid(formData);
+
+      console.log('isFormValid',isFormValid);
+
       if (!isFormValid) return;
 
       const correctedItem = {
@@ -137,19 +135,31 @@ document.addEventListener('DOMContentLoaded', () => {
         dates: [...currentItem.dates, formatDateShort(new Date(formData.date))],
       };
 
-      const updatedData = data.map((el) => (el.id === +currentId ? correctedItem : el));
+      const updatedData = data.map((el) => (el.id === id ? correctedItem : el));
       NOTES_LIST = [...updatedData];
-      console.log(NOTES_LIST);
       render(updatedData, root);
       handelModalHide(modal);
     });
   }
 
-  function addToArchiveItem() {
-    console.log('archive');
+  function archivedItem(id, data, root) {
+    const currentItem = data.find((el) => el.id === id);
+    if (!currentItem) return;
+
+    const correctedItem = {
+      ...currentItem,
+      status: currentItem.status === 'active' ? 'archive' : 'active'
+    };
+
+    const updatedData = data.map((el) => (el.id === id ? correctedItem : el));
+    NOTES_LIST = [...updatedData];
+    const statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
+    render(updatedData, root);
+    renderSummary(statusNotes, summaryList);
   };
 
   function openModal(el, target) {
+   
     el.addEventListener('click', () => {
       handelModalVisible(target);
     });
@@ -169,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function addNewItem(modal, root) {
+    isEditMode = false;
     const form = document.querySelector("#form");
     form.addEventListener('submit', (event) => {
       event.preventDefault();
@@ -201,23 +212,31 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function handelModalVisible(modal) {
+     const dateLabel = document.querySelector('#dateLabel')
+     const addNoteButton = document.querySelector('#add-note__button')
+    if(!dateLabel || !addNoteButton) return;
+    dateLabel.style.display = `${isEditMode ? 'block' : 'none'}`
+    addNoteButton.textContent = `${isEditMode ? 'Edit note' : 'Add note'}`
     modal.classList.add(CLASSES.MODAL_ACTIVE);
     modal.classList.remove(CLASSES.MODAL_HIDE);
   };
+
+  function isValid(data) {
+    if (!data.title && !data.title.trim()) {
+      return false;
+    }
+    if (!data.category) {
+      return false;
+    }
+    if (!data.content && !data.content.trim()) {
+      return false;
+    }
+    if (!data.date && isEditMode) {
+      return false;
+    }else {
+      return true;
+    }
+  }
+
 });
 
-
-function isValid(data) {
-  if (!data.title && !data.title.trim()) {
-    return false;
-  }
-  if (!data.category) {
-    return false;
-  }
-  if (!data.content && !data.content.trim()) {
-    return false;
-  }
-  if (!data.date) {
-    return false;
-  }
-}
