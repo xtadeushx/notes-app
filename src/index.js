@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('.modal');
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
+  const deleteAllButton = document.querySelector('#deleteAllButton');
 
   let statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
 
@@ -37,7 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     tagName: 'ul',
     className: 'table__list table-summary__list',
   });
+
   summaryTable.appendChild(summaryList);
+
+  deleteAllButton.addEventListener('click',()=> deleteAllItems(list, summaryList));
 
   render(NOTES_LIST, list);
 
@@ -121,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const isFormValid = isValid(formData);
 
-      console.log('isFormValid',isFormValid);
+      console.log('isFormValid', isFormValid);
 
       if (!isFormValid) return;
 
@@ -158,26 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSummary(statusNotes, summaryList);
   };
 
-  function openModal(el, target) {
-   
-    el.addEventListener('click', () => {
-      handelModalVisible(target);
-    });
-  };
-
-  function closeModal(trigger, modal) {
-    document.addEventListener('click', (event) => {
-      if (
-        (event.target.classList.contains('close') && trigger) ||
-        event.target.classList.contains('modal__wrapper')
-      ) {
-        handelModalHide(modal);
-      } else {
-        return;
-      }
-    });
-  };
-
   function addNewItem(modal, root) {
     isEditMode = false;
     const form = document.querySelector("#form");
@@ -206,15 +190,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  function deleteAllItems(root1, root2) {
+    NOTES_LIST = [];
+    render(NOTES_LIST, root1);
+    renderSummary(NOTES_LIST, root2)
+  }
+  // ==========Modal =============
+  function openModal(el, target) {
+
+    el.addEventListener('click', () => {
+      handelModalVisible(target);
+    });
+  };
+
+  function closeModal(trigger, modal) {
+    document.addEventListener('click', (event) => {
+      if (
+        (event.target.classList.contains('close') && trigger) ||
+        event.target.classList.contains('modal__wrapper')
+      ) {
+        handelModalHide(modal);
+      } else {
+        return;
+      }
+    });
+  };
+
   function handelModalHide(modal) {
     modal.classList.remove(CLASSES.MODAL_ACTIVE);
     modal.classList.add(CLASSES.MODAL_HIDE);
   };
 
   function handelModalVisible(modal) {
-     const dateLabel = document.querySelector('#dateLabel')
-     const addNoteButton = document.querySelector('#add-note__button')
-    if(!dateLabel || !addNoteButton) return;
+    const dateLabel = document.querySelector('#dateLabel')
+    const addNoteButton = document.querySelector('#add-note__button')
+    if (!dateLabel || !addNoteButton) return;
     dateLabel.style.display = `${isEditMode ? 'block' : 'none'}`
     addNoteButton.textContent = `${isEditMode ? 'Edit note' : 'Add note'}`
     modal.classList.add(CLASSES.MODAL_ACTIVE);
@@ -233,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!data.date && isEditMode) {
       return false;
-    }else {
+    } else {
       return true;
     }
   }
