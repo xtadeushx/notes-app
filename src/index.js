@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         category: data.category,
         content: [data.content],
         dates: [],
+        status: 'active'
       };
 
       const updatedData = [...NOTES_LIST, newItem];
