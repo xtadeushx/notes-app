@@ -2,17 +2,11 @@ import { DATA } from '../src/models/data.js';
 import { formatDateLong, createElement, formatDateShort, mappingNotesStatus } from '../src/helpers/helper.js';
 import { renderRow } from '../src/components/ui/renderRow.js';
 import { renderSummaryRow } from './components/ui/renderSummary.js';
+import { STATUSES, ICONS_SRC } from './constants/constants.js';
 
 const CLASSES = {
   MODAL_ACTIVE: 'modal-active',
   MODAL_HIDE: 'modal-hide',
-};
-
-const ICONS_SRC = {
-  task: './assets/shopping-cart.png',
-  'random thoughts': './assets/thought.png',
-  idea: './assets/lightbulb.png',
-  quote: './assets/quote.png',
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const addNoteButton = document.querySelector('#add-note');
   const closeButton = document.querySelector('.close');
   const deleteAllButton = document.querySelector('#deleteAllButton');
+  const archiveAllButton = document.querySelector('#archiveAllButton');
 
   let statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
 
@@ -41,7 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   summaryTable.appendChild(summaryList);
 
-  deleteAllButton.addEventListener('click',()=> deleteAllItems(list, summaryList));
+  deleteAllButton.addEventListener('click', () => deleteAllItems(list, summaryList));
+  archiveAllButton.addEventListener('click', () => archiveAllItems(list, summaryList));
 
   render(NOTES_LIST, list);
 
@@ -152,12 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const correctedItem = {
       ...currentItem,
-      status: currentItem.status === 'active' ? 'archive' : 'active'
+      status: currentItem.status === STATUSES.ACTIVE ? STATUSES.ARCHIVED: STATUSES.ACTIVE
     };
 
     const updatedData = data.map((el) => (el.id === id ? correctedItem : el));
     NOTES_LIST = [...updatedData];
-    const statusNotes = mappingNotesStatus(NOTES_LIST, 'archived');
+    const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
     render(updatedData, root);
     renderSummary(statusNotes, summaryList);
   };
@@ -180,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         category: data.category,
         content: [data.content],
         dates: [],
-        status: 'active'
+        status: STATUSES.ACTIVE
       };
 
       const updatedData = [...NOTES_LIST, newItem];
@@ -194,6 +190,19 @@ document.addEventListener('DOMContentLoaded', () => {
     NOTES_LIST = [];
     render(NOTES_LIST, root1);
     renderSummary(NOTES_LIST, root2)
+  }
+
+  function archiveAllItems(root1, root2) {
+    NOTES_LIST = NOTES_LIST.map(el => {
+      return {
+        ...el,
+        status: el.status === STATUSES.ARCHIVED
+      }
+    })
+    render(NOTES_LIST, root1);
+    const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
+    console.log(statusNotes);
+    renderSummary(statusNotes, root2);
   }
   // ==========Modal =============
   function openModal(el, target) {
