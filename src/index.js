@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let isEditMode = false;
   let archivedMode = true;
+
   const list = createElement({
     tagName: 'ul',
     className: 'table__list',
@@ -33,20 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
     tagName: 'ul',
     className: 'table__list table-summary__list',
   });
-
   summaryTable.appendChild(summaryList);
 
   deleteAllButton.addEventListener('click', () => deleteAllItems(list, summaryList));
   archiveAllButton.addEventListener('click', () => archiveAllItems(list, summaryList));
 
-  render(NOTES_LIST, list, summaryList);
+  render(NOTES_LIST, list);
 
   renderSummary(statusNotes, summaryList);
 
   openModal(addNoteButton, modal);
   closeModal(closeButton, modal);
 
-  addNewItem(modal, list, summaryList);
+  addNewItem(modal, list);
 
 
   function render(data, root) {
@@ -97,13 +97,20 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  function deleteItem(id, data, root) {
+  function handelRender(data, root, status) {
     const summaryList = document.querySelector('.table-summary__list')
+    render(data, root);
+    const statusNotes = mappingNotesStatus(data, status);
+    renderSummary(statusNotes, summaryList);
+  }
+
+  function deleteItem(id, data, root) {
     const updatedData = data.filter((el) => el.id !== id);
     NOTES_LIST = [...updatedData];
-    render(updatedData, root);
-    const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
-    renderSummary(statusNotes, summaryList);
+    // render(updatedData, root);
+    // const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
+    // renderSummary(statusNotes, summaryList);
+    handelRender(NOTES_LIST, root, STATUSES.ARCHIVED)
   }
 
   function editItem(id, data, root) {
@@ -149,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const correctedItem = {
       ...currentItem,
-      status: currentItem.status === STATUSES.ACTIVE ? STATUSES.ARCHIVED: STATUSES.ACTIVE
+      status: currentItem.status === STATUSES.ACTIVE ? STATUSES.ARCHIVED : STATUSES.ACTIVE
     };
 
     const updatedData = data.map((el) => (el.id === id ? correctedItem : el));
@@ -159,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSummary(statusNotes, summaryList);
   };
 
-  function addNewItem(modal, root, root2) {
+  function addNewItem(modal, root) {
     isEditMode = false;
     const form = document.querySelector("#form");
     form.addEventListener('submit', (event) => {
@@ -182,9 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const updatedData = [...NOTES_LIST, newItem];
       NOTES_LIST = [...updatedData];
-      render(updatedData, root);
-      const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
-      renderSummary(statusNotes, root2);
+      handelRender(NOTES_LIST, root, STATUSES.ARCHIVED)
       handelModalHide(modal);
     });
   };
@@ -195,17 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSummary(NOTES_LIST, root2)
   }
 
-  function archiveAllItems(root1, root2) {
+  function archiveAllItems(root) {
     NOTES_LIST = NOTES_LIST.map(el => {
       return {
         ...el,
-        status: archivedMode ?  STATUSES.ARCHIVED : STATUSES.ACTIVE
+        status: archivedMode ? STATUSES.ARCHIVED : STATUSES.ACTIVE
       }
     });
     archivedMode = !archivedMode;
-    render(NOTES_LIST, root1);
-    const statusNotes = mappingNotesStatus(NOTES_LIST, STATUSES.ARCHIVED);
-    renderSummary(statusNotes, root2);
+    handelRender(NOTES_LIST, root, STATUSES.ARCHIVED)
   }
   // ==========Modal =============
   function openModal(el, target) {
